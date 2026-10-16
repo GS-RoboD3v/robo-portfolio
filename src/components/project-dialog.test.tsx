@@ -1,13 +1,40 @@
-import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { ProjectDialog } from "./project-dialog";
-import { projects } from "../content/projects";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import App from "../App";
 
-describe("ProjectDialog", () => {
-  it("opens with project title", () => {
-    const project = projects.find((p) => p.dialog);
-    if (!project) throw new Error("no dialog project");
-    render(<ProjectDialog project={project} onClose={vi.fn()} />);
-    expect(screen.getByText(project.title)).toBeInTheDocument();
+function stubMatchMedia(matches: boolean) {
+  window.matchMedia = vi.fn().mockImplementation(
+    () =>
+      ({
+        matches,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      }) as unknown as MediaQueryList,
+  );
+}
+
+describe("case dialog (?case= deep-link)", () => {
+  afterEach(() => {
+    window.history.pushState({}, "", "/");
+    vi.restoreAllMocks();
+  });
+
+  it("opens terragousto via ?case=, shows Problem + Live href, closes on ESC", async () => {
+    stubMatchMedia(true);
+    window.history.pushState({}, "", "/?case=terragousto");
+    render(<App />);
+
+    const dialog = await screen.findByRole("dialog");
+    expect(
+      within(dialog).getByRole("heading", { name: "Πρόβλημα" }),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole("link", { name: /live/i }),
+    ).toHaveAttribute("href", "https://terragousto.gr");
+
+    fireEvent.keyDown(dialog, { key: "Escape", code: "Escape", keyCode: 27 });
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
   });
 });

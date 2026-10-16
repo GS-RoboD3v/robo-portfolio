@@ -1,5 +1,24 @@
 export type Axis = "Money" | "Brains" | "Beauty" | "Platform" | "Viral";
 
+export interface CaseProof {
+  label: string;
+  href: string;
+  kind: "live" | "checkout" | "demo" | "share";
+}
+
+export interface CaseStep {
+  t: string;
+  what: string;
+}
+
+export interface CaseData {
+  problem: string;
+  build: string[];
+  proof: CaseProof[];
+  arch: string[];
+  timeline: CaseStep[];
+}
+
 export interface Project {
   id: string;
   axis: Axis;
@@ -11,6 +30,7 @@ export interface Project {
   metrics: string;
   screenshot: string;
   dialog: boolean;
+  caseData?: CaseData;
 }
 
 export const axes: Axis[] = ["Money", "Brains", "Beauty", "Platform", "Viral"];
@@ -27,6 +47,29 @@ export const projects: Project[] = [
     metrics: "e-shop με κάρτα + αντικαταβολή",
     screenshot: "/previews/terragousto-hero.webp",
     dialog: true,
+    caseData: {
+      problem:
+        "Χειροκίνητες παραγγελίες — χωρίς κατάλογο, χωρίς online πληρωμή. Κάθε πώληση ήθελε τηλέφωνο ή μήνυμα.",
+      build: [
+        "Κατάλογος με καλάθι και checkout — 19 σελίδες διαδρομών",
+        "Διπλή πληρωμή: κάρτα Piraeus + αντικαταβολή",
+        "Παραγγελίες και συγχρονισμός μέσω Medusa v2, με 20+ backend tests",
+      ],
+      proof: [
+        { label: "Ζωντανό κατάστημα", href: "https://terragousto.gr", kind: "live" },
+        {
+          label: "Checkout με κάρτα + αντικαταβολή",
+          href: "https://terragousto.gr",
+          kind: "checkout",
+        },
+      ],
+      arch: ["React 18 + Vite 7", "Medusa v2", "VPS + Caddy"],
+      timeline: [
+        { t: "Κατάλογος", what: "Προϊόντα, καλάθι, checkout" },
+        { t: "Πληρωμές", what: "Κάρτα Piraeus + αντικαταβολή σε παραγωγή" },
+        { t: "Παραγωγή", what: "Ζωντανό κατάστημα — sitemap 117 γραμμών, OG" },
+      ],
+    },
   },
   {
     id: "lab",
@@ -39,6 +82,29 @@ export const projects: Project[] = [
     metrics: "3 modes — 25/32/45 ερωτήσεις",
     screenshot: "/previews/lab-hero.webp",
     dialog: true,
+    caseData: {
+      problem:
+        "Έλλειψη δωρεάν ελληνικού τεστ IQ με διαφανή, προσαρμοστική βαθμολόγηση — τα περισσότερα κρύβουν τον αλγόριθμο.",
+      build: [
+        "Μηχανή IRT 3PL CAT με όριο έκθεσης 0.15",
+        "3 modes — 25/32/45 ερωτήσεις, χρονόμετρο 20 λεπτών",
+        "Ανώνυμα share links 30 ημερών, χωρίς λογαριασμό",
+      ],
+      proof: [
+        { label: "Ζωντανό demo", href: "https://greek-iq-app.vercel.app", kind: "demo" },
+        {
+          label: "Κοινοποιήσιμο αποτέλεσμα",
+          href: "https://greek-iq-app.vercel.app",
+          kind: "share",
+        },
+      ],
+      arch: ["Next.js 16 + React 19", "Neon + Upstash Redis", "Serwist PWA offline"],
+      timeline: [
+        { t: "Μηχανή", what: "IRT engine + τράπεζα 21 θεμάτων" },
+        { t: "Modes", what: "3 modes με έντιμη βαθμολόγηση" },
+        { t: "Δημοσίευση", what: "Demo + share links, WCAG AA" },
+      ],
+    },
   },
   {
     id: "plaisiore",

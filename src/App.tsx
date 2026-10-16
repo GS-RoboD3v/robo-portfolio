@@ -42,13 +42,24 @@ export default function App() {
   const [active, setActive] = React.useState<Project | null>(null);
 
   React.useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("case");
-    if (id) {
-      const found = projects.find((p) => p.id === id && p.dialog);
-      if (found) setActive(found);
-    }
+    const id = new URLSearchParams(window.location.search).get("case");
+    const found = projects.find((p) => p.id === id && p.dialog);
+    if (found) setActive(found);
   }, []);
+
+  function openCase(p: Project) {
+    setActive(p);
+    const url = new URL(window.location.href);
+    url.searchParams.set("case", p.id);
+    window.history.pushState({}, "", url);
+  }
+
+  function closeCase() {
+    setActive(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("case");
+    window.history.pushState({}, "", url);
+  }
 
   return (
     <>
@@ -98,7 +109,7 @@ export default function App() {
             <h2 id="projects-h" className="mb-6 text-2xl font-bold">
               Έργα
             </h2>
-            <ProjectGrid onOpen={setActive} />
+            <ProjectGrid onOpen={openCase} />
           </section>
         </ScrollReveal>
 
@@ -123,7 +134,7 @@ export default function App() {
                     </p>
                     <div className="mt-4 flex flex-wrap items-center gap-4">
                       <button
-                        onClick={() => setActive(p)}
+                        onClick={() => openCase(p)}
                         className="inline-flex min-h-[44px] items-center text-sm font-medium text-primary"
                       >
                         Άνοιγμα ανάλυσης →
@@ -267,7 +278,7 @@ export default function App() {
         Επικοινωνία
       </a>
 
-      <ProjectDialog project={active} onClose={() => setActive(null)} />
+      <ProjectDialog project={active} onClose={closeCase} />
     </>
   );
 }
