@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/ /admin/ /private/ /drafts/
+
+Sitemap: https://portfolio.robod3v.com/sitemap.xml

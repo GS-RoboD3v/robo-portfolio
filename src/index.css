@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  --background: oklch(0.02 0 0);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.06 0 0);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.06 0 0);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.9 0.15 195);
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.15 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.15 0 0);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.9 0.15 195);
+  --radius: 1rem;
+
+  --color-live: #00ff41;
+  --color-wip: #ffcc00;
+  --tile-glow-money: rgba(0, 255, 65, 0.14);
+  --tile-glow-brains: rgba(0, 209, 255, 0.14);
+  --tile-glow-beauty: rgba(159, 121, 238, 0.16);
+  --radius-tile: 1rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-live: var(--color-live);
+  --color-wip: var(--color-wip);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue",
+    Arial, sans-serif;
+}
+
+.tile-glow-money {
+  box-shadow: 0 0 40px -12px var(--tile-glow-money);
+}
+.tile-glow-brains {
+  box-shadow: 0 0 40px -12px var(--tile-glow-brains);
+}
+.tile-glow-beauty {
+  box-shadow: 0 0 40px -12px var(--tile-glow-beauty);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
