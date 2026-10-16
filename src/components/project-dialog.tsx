@@ -1,8 +1,9 @@
 import * as React from "react";
+import { useMediaQuery } from "../lib/media";
 import { ExternalLink, Copy, Check } from "lucide-react";
-import type { CaseData, Project } from "../content/projects";
+import type { CaseProject, Project } from "../content/projects";
 import { site } from "../content/site";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,23 +16,6 @@ import {
   SheetDescription,
   SheetTitle,
 } from "./ui/sheet";
-
-function useIsDesktop(): boolean {
-  const [desktop, setDesktop] = React.useState<boolean>(() =>
-    typeof window === "undefined" || typeof window.matchMedia !== "function"
-      ? true
-      : window.matchMedia("(min-width: 768px)").matches,
-  );
-  React.useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function")
-      return;
-    const mq = window.matchMedia("(min-width: 768px)");
-    const onChange = () => setDesktop(mq.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-  return desktop;
-}
 
 async function copyText(text: string): Promise<boolean> {
   try {
@@ -52,15 +36,9 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
-export function CaseBody({ project }: { project: Project }) {
+export function CaseBody({ project }: { project: CaseProject }) {
   const [copied, setCopied] = React.useState(false);
-  const c: CaseData = project.caseData ?? {
-    problem: project.oneLiner,
-    build: [],
-    proof: [],
-    arch: [],
-    timeline: [],
-  };
+  const c = project.caseData;
 
   async function onCopy() {
     const ok = await copyText(
@@ -72,36 +50,27 @@ export function CaseBody({ project }: { project: Project }) {
     }
   }
 
-  return (
-    <div className="grid gap-5">
-      <img
-        src={project.screenshot}
-        alt={`Στιγμιότυπο ${project.title}`}
-        loading="lazy"
-        width={1280}
-        height={800}
-        className="aspect-[16/10] w-full rounded-xl object-cover"
-      />
-      <section aria-labelledby={`case-problem-${project.id}`}>
-        <h3 id={`case-problem-${project.id}`} className="font-semibold">
-          Πρόβλημα
-        </h3>
-        <p className="mt-1 text-sm text-muted-foreground">{c.problem}</p>
-      </section>
-      <section aria-labelledby={`case-build-${project.id}`}>
-        <h3 id={`case-build-${project.id}`} className="font-semibold">
-          Τι χτίστηκε
-        </h3>
+  const sections: { id: string; title: string; body: React.ReactNode }[] = [
+    {
+      id: `case-problem-${project.id}`,
+      title: "Πρόβλημα",
+      body: <p className="mt-1 text-sm text-muted-foreground">{c.problem}</p>,
+    },
+    {
+      id: `case-build-${project.id}`,
+      title: "Τι χτίστηκε",
+      body: (
         <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
           {c.build.map((b) => (
             <li key={b}>{b}</li>
           ))}
         </ul>
-      </section>
-      <section aria-labelledby={`case-proof-${project.id}`}>
-        <h3 id={`case-proof-${project.id}`} className="font-semibold">
-          Ζωντανή απόδειξη
-        </h3>
+      ),
+    },
+    {
+      id: `case-proof-${project.id}`,
+      title: "Ζωντανή απόδειξη",
+      body: (
         <ul className="mt-1 space-y-1 text-sm">
           {c.proof.map((p) => (
             <li key={p.label}>
@@ -116,11 +85,12 @@ export function CaseBody({ project }: { project: Project }) {
             </li>
           ))}
         </ul>
-      </section>
-      <section aria-labelledby={`case-arch-${project.id}`}>
-        <h3 id={`case-arch-${project.id}`} className="font-semibold">
-          Αρχιτεκτονική
-        </h3>
+      ),
+    },
+    {
+      id: `case-arch-${project.id}`,
+      title: "Αρχιτεκτονική",
+      body: (
         <ul className="mt-1 flex flex-wrap gap-1.5 text-xs">
           {c.arch.map((a) => (
             <li
@@ -131,29 +101,55 @@ export function CaseBody({ project }: { project: Project }) {
             </li>
           ))}
         </ul>
-      </section>
-      <section aria-labelledby={`case-timeline-${project.id}`}>
-        <h3 id={`case-timeline-${project.id}`} className="font-semibold">
-          Χρονολόγιο
-        </h3>
+      ),
+    },
+    {
+      id: `case-timeline-${project.id}`,
+      title: "Χρονολόγιο",
+      body: (
         <ol className="mt-1 space-y-1 text-sm text-muted-foreground">
           {c.timeline.map((s) => (
-            <li key={s.t}>
-              <strong className="text-foreground">{s.t}</strong> — {s.what}
+            <li key={s.title}>
+              <strong className="text-foreground">{s.title}</strong> — {s.description}
             </li>
           ))}
         </ol>
-      </section>
+      ),
+    },
+  ];
+
+  return (
+    <div className="grid gap-5">
+      <img
+        src={project.screenshot}
+        alt={`Στιγμιότυπο ${project.title}`}
+        loading="lazy"
+        width={1280}
+        height={800}
+        className="aspect-[16/10] w-full rounded-xl object-cover"
+      />
+      {sections.map((s) => (
+        <section key={s.id} aria-labelledby={s.id}>
+          <h3 id={s.id} className="font-semibold">
+            {s.title}
+          </h3>
+          {s.body}
+        </section>
+      ))}
       <div className="flex flex-wrap gap-2">
         <a
           href={`mailto:${site.email}?subject=${encodeURIComponent(`Case: ${project.id}`)}`}
+          className={buttonVariants({ variant: "default" })}
         >
-          <Button>Επικοινωνία</Button>
+          Επικοινωνία
         </a>
-        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-          <Button variant="secondary">
-            Live ↗ <ExternalLink size={14} aria-hidden="true" />
-          </Button>
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonVariants({ variant: "secondary" })}
+        >
+          Live ↗ <ExternalLink size={14} aria-hidden="true" />
         </a>
         <Button variant="ghost" onClick={onCopy}>
           {copied ? (
@@ -178,7 +174,7 @@ export function ProjectDialog({
   project: Project | null;
   onClose: () => void;
 }) {
-  const desktop = useIsDesktop();
+  const desktop = useMediaQuery("(min-width: 768px)", true);
   const open = project !== null;
 
   React.useEffect(() => {
@@ -194,6 +190,9 @@ export function ProjectDialog({
     if (!next) onClose();
   };
 
+  const body = project?.dialog ? (
+    <CaseBody key={project.id} project={project} />
+  ) : null;
   if (desktop) {
     return (
       <Dialog open={open} onOpenChange={handleChange}>
@@ -201,7 +200,7 @@ export function ProjectDialog({
           <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogTitle>{project.title}</DialogTitle>
             <DialogDescription>{project.oneLiner}</DialogDescription>
-            <CaseBody key={project.id} project={project} />
+            {body}
           </DialogContent>
         )}
       </Dialog>
@@ -217,7 +216,7 @@ export function ProjectDialog({
         >
           <SheetTitle>{project.title}</SheetTitle>
           <SheetDescription>{project.oneLiner}</SheetDescription>
-          <CaseBody key={project.id} project={project} />
+          {body}
         </SheetContent>
       )}
     </Sheet>

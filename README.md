@@ -14,15 +14,15 @@
 
 - **Everything clickable-live** — each project links to its production URL;
   tiles show auto-refreshed hero screenshots (monthly Playwright capture).
-- **Money / Brains / Beauty** — filterable bento grid: Medusa e-shop with
-  card + cash-on-delivery checkout, adaptive IRT IQ engine, cinematic 3D
-  artist portfolio, plus learning platform and viral quiz.
+- **Money / Brains / Beauty / Platform / Viral** — filterable bento grid:
+  Medusa e-shop with card + cash-on-delivery checkout, adaptive IRT IQ
+  engine, cinematic 3D artist portfolio, plus learning platform and viral quiz.
 - **Two deep case studies** (terragousto, lab): Problem → Build → Live proof,
   architecture mini, timeline — desktop dialog, bottom-sheet on mobile.
 - **Zero tracking** — no cookies, no analytics; privacy-by-design copy and
   headers (strict CSP, HSTS preload).
 - **Fast by construction** — prerendered single route, ~45KB initial JS,
-  Lighthouse gates perf≥90 / a11y≥95.
+  Lighthouse targets perf≥90 / a11y≥95 (manual run, see CONTENT_SEO_PLAN.md).
 
 ## Quick Start
 

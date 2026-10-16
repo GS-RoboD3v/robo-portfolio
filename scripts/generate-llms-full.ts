@@ -3,8 +3,8 @@ import { projects } from "../src/content/projects";
 import { site } from "../src/content/site";
 
 // Builds public/llms-full.txt from the same data the page renders —
-// counts stay in sync by construction. Roboschool track/lesson counts
-// are manual-sync: verify quarterly via getPublishedTracks().
+// project rows stay in sync by construction. Only proofStrip/llms.txt
+// service blurbs are manual-sync: verify quarterly.
 const lines = [
   "# RoboD3v Portfolio (full context)",
   `> ${site.heroSub}`,
@@ -19,7 +19,7 @@ const lines = [
   ]),
   "## Contact",
   `Email: ${site.email}`,
-  "Automations/AI agents: https://robod3v.com/services/automations, https://robod3v.com/services/ai-agents",
+  `Automations/AI agents: ${site.services.automations}, ${site.services.aiAgents}`,
 ];
-writeFileSync("public/llms-full.txt", lines.join("\n"));
+writeFileSync("public/llms-full.txt", `${lines.join("\n")}\n`);
 console.log(`llms-full.txt: ${projects.length} projects`);

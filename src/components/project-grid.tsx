@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ExternalLink } from "lucide-react";
 import {
+  axes,
   projects,
   filterProjects,
   type Axis,
@@ -15,35 +16,47 @@ export type AxisFilter = Axis | "All";
 
 const filters: { value: AxisFilter; label: string }[] = [
   { value: "All", label: "Όλα" },
-  { value: "Money", label: "Money" },
-  { value: "Brains", label: "Brains" },
-  { value: "Beauty", label: "Beauty" },
+  ...axes.map((a) => ({ value: a, label: a })),
 ];
 
-const glowClass: Record<string, string> = {
+const glowClass: Record<Axis, string> = {
   Money: "tile-glow-money",
   Brains: "tile-glow-brains",
   Beauty: "tile-glow-beauty",
+  Platform: "",
+  Viral: "",
 };
+
+const PREVIEW_STATUS_LIVE = "LIVE-CAPTURED";
+const PREVIEW_FETCH_RETRIES = 2;
 
 function usePreviewDates(): Record<string, string> {
   const [dates, setDates] = React.useState<Record<string, string>>({});
   React.useEffect(() => {
     let cancelled = false;
-    fetch("/previews/previews.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j: unknown) => {
-        if (cancelled || j === null || typeof j !== "object") return;
-        const d: Record<string, string> = {};
-        for (const [k, v] of Object.entries(j as Record<string, unknown>)) {
-          if (v !== null && typeof v === "object" && "updated" in v) {
-            const u = (v as { updated: unknown }).updated;
-            if (typeof u === "string") d[k] = u;
+    async function load(): Promise<void> {
+      for (let attempt = 0; attempt <= PREVIEW_FETCH_RETRIES; attempt++) {
+        try {
+          const r = await fetch("/previews/previews.json");
+          if (!r.ok) continue;
+          const j: unknown = await r.json();
+          if (cancelled || j === null || typeof j !== "object") return;
+          const d: Record<string, string> = {};
+          for (const [k, v] of Object.entries(j as Record<string, unknown>)) {
+            if (v !== null && typeof v === "object" && "updated" in v) {
+              const entry = v as { updated: unknown; status?: unknown };
+              if (entry.status !== PREVIEW_STATUS_LIVE) continue;
+              if (typeof entry.updated === "string") d[k] = entry.updated;
+            }
           }
+          if (!cancelled) setDates((prev) => ({ ...prev, ...d }));
+          return;
+        } catch {
+          // retry until attempts exhausted; prior dates stay rendered
         }
-        setDates(d);
-      })
-      .catch(() => {});
+      }
+    }
+    void load();
     return () => {
       cancelled = true;
     };
@@ -74,7 +87,7 @@ export function ProjectGrid({
       </TabsList>
       <div className="grid gap-4 md:grid-cols-3 md:gap-6">
         {visible.map((p) => (
-          <Card key={p.id} className={glowClass[p.axis] ?? ""}>
+          <Card key={p.id} className={glowClass[p.axis]}>
             <CardHeader>
               <div className="mb-2 flex items-center gap-2">
                 <Badge variant="secondary">{p.axis}</Badge>
@@ -104,12 +117,12 @@ export function ProjectGrid({
               </div>
             </CardContent>
             <CardFooter className="flex-wrap">
-              <span className="text-xs text-muted-foreground">{p.status} ·</span>
-              {previewDates[p.id] ? (
+              <span className="text-xs text-muted-foreground">live</span>
+              {previewDates[p.id] && (
                 <span className="whitespace-nowrap text-xs text-muted-foreground">
-                  ανανεώθηκε {previewDates[p.id]}
+                  · ανανεώθηκε {previewDates[p.id]}
                 </span>
-              ) : null}
+              )}
               {p.dialog ? (
                 <button
                   onClick={() => onOpen(p)}

@@ -1,17 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import App from "../App";
-
-function stubMatchMedia(matches: boolean) {
-  window.matchMedia = vi.fn().mockImplementation(
-    () =>
-      ({
-        matches,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      }) as unknown as MediaQueryList,
-  );
-}
+import { stubMatchMedia } from "../test-setup";
 
 describe("case dialog (?case= deep-link)", () => {
   afterEach(() => {

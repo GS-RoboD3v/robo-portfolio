@@ -3,14 +3,21 @@ export type Axis = "Money" | "Brains" | "Beauty" | "Platform" | "Viral";
 export interface CaseProof {
   label: string;
   href: string;
-  kind: "live" | "checkout" | "demo" | "share";
 }
-
 export interface CaseStep {
-  t: string;
-  what: string;
+  title: string;
+  description: string;
 }
-
+interface ProjectBase {
+  id: string;
+  axis: Axis;
+  title: string;
+  oneLiner: string;
+  stack: string[];
+  liveUrl: string;
+  metrics: string;
+  screenshot: string;
+}
 export interface CaseData {
   problem: string;
   build: string[];
@@ -18,20 +25,15 @@ export interface CaseData {
   arch: string[];
   timeline: CaseStep[];
 }
-
-export interface Project {
-  id: string;
-  axis: Axis;
-  title: string;
-  oneLiner: string;
-  stack: [string, string, string];
-  liveUrl: string;
-  status: "live";
-  metrics: string;
-  screenshot: string;
-  dialog: boolean;
-  caseData?: CaseData;
+export interface CaseProject extends ProjectBase {
+  dialog: true;
+  caseData: CaseData;
 }
+export interface LinkProject extends ProjectBase {
+  dialog: false;
+  caseData?: never;
+}
+export type Project = CaseProject | LinkProject;
 
 export const axes: Axis[] = ["Money", "Brains", "Beauty", "Platform", "Viral"];
 
@@ -43,7 +45,6 @@ export const projects: Project[] = [
     oneLiner: "Πλήρες e-shop με κάρτα + αντικαταβολή σε Medusa v2.",
     stack: ["React 18", "Medusa v2", "Tailwind v4"],
     liveUrl: "https://terragousto.gr",
-    status: "live",
     metrics: "e-shop με κάρτα + αντικαταβολή",
     screenshot: "/previews/terragousto-hero.webp",
     dialog: true,
@@ -56,18 +57,17 @@ export const projects: Project[] = [
         "Παραγγελίες και συγχρονισμός μέσω Medusa v2, με 20+ backend tests",
       ],
       proof: [
-        { label: "Ζωντανό κατάστημα", href: "https://terragousto.gr", kind: "live" },
+        { label: "Ζωντανό κατάστημα", href: "https://terragousto.gr" },
         {
           label: "Checkout με κάρτα + αντικαταβολή",
           href: "https://terragousto.gr",
-          kind: "checkout",
         },
       ],
       arch: ["React 18 + Vite 7", "Medusa v2", "VPS + Caddy"],
       timeline: [
-        { t: "Κατάλογος", what: "Προϊόντα, καλάθι, checkout" },
-        { t: "Πληρωμές", what: "Κάρτα Piraeus + αντικαταβολή σε παραγωγή" },
-        { t: "Παραγωγή", what: "Ζωντανό κατάστημα — sitemap 117 γραμμών, OG" },
+        { title: "Κατάλογος", description: "Προϊόντα, καλάθι, checkout" },
+        { title: "Πληρωμές", description: "Κάρτα Piraeus + αντικαταβολή σε παραγωγή" },
+        { title: "Παραγωγή", description: "Ζωντανό κατάστημα — sitemap 117 γραμμών, OG" },
       ],
     },
   },
@@ -78,7 +78,6 @@ export const projects: Project[] = [
     oneLiner: "Δωρεάν ελληνικό τεστ IQ με προσαρμοστική IRT βαθμολόγηση.",
     stack: ["Next.js 16", "React 19", "Upstash Redis"],
     liveUrl: "https://greek-iq-app.vercel.app",
-    status: "live",
     metrics: "3 modes — 25/32/45 ερωτήσεις",
     screenshot: "/previews/lab-hero.webp",
     dialog: true,
@@ -91,18 +90,17 @@ export const projects: Project[] = [
         "Ανώνυμα share links 30 ημερών, χωρίς λογαριασμό",
       ],
       proof: [
-        { label: "Ζωντανό demo", href: "https://greek-iq-app.vercel.app", kind: "demo" },
+        { label: "Ζωντανό demo", href: "https://greek-iq-app.vercel.app" },
         {
           label: "Κοινοποιήσιμο αποτέλεσμα",
           href: "https://greek-iq-app.vercel.app",
-          kind: "share",
         },
       ],
       arch: ["Next.js 16 + React 19", "Neon + Upstash Redis", "Serwist PWA offline"],
       timeline: [
-        { t: "Μηχανή", what: "IRT engine + τράπεζα 21 θεμάτων" },
-        { t: "Modes", what: "3 modes με έντιμη βαθμολόγηση" },
-        { t: "Δημοσίευση", what: "Demo + share links, WCAG AA" },
+        { title: "Μηχανή", description: "IRT engine + τράπεζα 21 θεμάτων" },
+        { title: "Modes", description: "3 modes με έντιμη βαθμολόγηση" },
+        { title: "Δημοσίευση", description: "Demo + share links, WCAG AA" },
       ],
     },
   },
@@ -113,7 +111,6 @@ export const projects: Project[] = [
     oneLiner: "Portfolio 3D artist με 17 έργα και κινηματογραφικά Vimeo embeds.",
     stack: ["React 19", "Tailwind v4", "framer-motion"],
     liveUrl: "https://plasiore.netlify.app",
-    status: "live",
     metrics: "17 έργα + 11 Vimeo embeds",
     screenshot: "/previews/plaisiore-hero.webp",
     dialog: false,
@@ -125,7 +122,6 @@ export const projects: Project[] = [
     oneLiner: "Πλατφόρμα 7 tracks / 65 μαθημάτων με Stripe συνδρομές.",
     stack: ["Next.js 16", "Supabase", "Stripe"],
     liveUrl: "https://school.robod3v.com",
-    status: "live",
     metrics: "7 tracks / 65 μαθήματα",
     screenshot: "/previews/roboschool-hero.webp",
     dialog: false,
@@ -137,7 +133,6 @@ export const projects: Project[] = [
     oneLiner: "Ελληνικό πολιτικό τεστ 40 ερωτήσεων με κοινοποιήσιμο αποτέλεσμα.",
     stack: ["Next.js 16", "React 19", "html-to-image"],
     liveUrl: "https://robo-political-compass.vercel.app",
-    status: "live",
     metrics: "40 ερωτήσεις / 12 ιδεολογίες",
     screenshot: "/previews/political-compass-hero.webp",
     dialog: false,

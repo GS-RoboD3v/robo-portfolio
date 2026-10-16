@@ -21,4 +21,10 @@ export const site = {
   ] as const,
   contactTitle: "Έχετε κάτι να χτίσουμε;",
   contactSub: "Ένα email αρκεί για να ξεκινήσουμε.",
+  services: {
+    automations: "https://robod3v.com/services/automations",
+    automationsLabel: "robod3v.com/services/automations",
+    aiAgents: "https://robod3v.com/services/ai-agents",
+    aiAgentsLabel: "robod3v.com/services/ai-agents",
+  } as const,
 } as const;

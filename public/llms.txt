@@ -16,5 +16,5 @@
 
 ## Services
 
-- Web εφαρμογές και e-shops. Αυτοματισμοί/AI coworkers: https://robod3v.com/services/automations, https://robod3v.com/ai-agents
+- Web εφαρμογές και e-shops. Αυτοματισμοί/AI coworkers: https://robod3v.com/services/automations, https://robod3v.com/services/ai-agents
 - Εκτίμηση κόστους εντός 48 ωρών μέσω email.

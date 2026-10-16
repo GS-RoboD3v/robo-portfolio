@@ -54,7 +54,9 @@ Single-test filter: `npx vitest run <path>`.
 
 - Never touch: `docs/superpowers/specs/*` (frozen decisions),
   `public/previews/*` + `public/og-cover.webp` (CI-generated; refresh via
-  `npm run capture-previews`, never hand-edit), `.netlify/` (local only).
+  `npm run capture-previews`, never hand-edit), `public/llms-full.txt`
+  (build-regenerated via `npm run llms-full`; `public/llms.txt` is the
+  hand-maintained one), `.netlify/` (local only).
 - Never add: router, `motion` package, i18n lib, CMS, store, charts,
   analytics, Playwright in runtime bundle (devDep-only for capture script).
 - Numbers in copy must trace to `src/content/projects.ts` or the spec —
@@ -69,12 +71,21 @@ Single-test filter: `npx vitest run <path>`.
 - EL-first copy, single CTA `mailto:info@robod3v.com`; new motion must die
   under `prefers-reduced-motion` + on touch; tap targets ≥44px;
   `ScrollReveal` (lazy) is the only animation primitive — no new ones.
-- `?case=<id>` deep-link (whitelist terragousto|lab) is the only routing;
-  S5 cards stay outbound-links-only, no dialogs.
+- `?case=<id>` deep-link is the only routing; allowlist derives from
+  `p.dialog` flags (`Record<string, true>`, currently terragousto|lab) —
+  never hardcode ids. S5 cards stay outbound-links-only, no dialogs.
 - Base UI sets `data-orientation`, never `data-horizontal` — Tailwind
   `data-*`/group variants must match runtime attributes actually emitted.
+- Navigating CTAs are `<a className={buttonVariants(...)}>`; never nest
+  `<button>` inside `<a>`. `matchMedia` only via `src/lib/media.ts`
+  `useMediaQuery` — no local helpers or one-line wrappers. Services URLs
+  live once in `site.services`; grid filters/glow derive from
+  `projects.ts` (`axes`, `dialog`, `Record<Axis, …>`) — never hardcode
+  axis lists or service URLs. Dialog-gated code takes `CaseProject`
+  (discriminated union), never `Project` + fallback.
 - Tests have no auto-cleanup: call `cleanup()` in `afterEach` whenever a
-  file renders more than once, and stub `matchMedia` per-test (never global).
+  file renders more than once, and reuse `stubMatchMedia` from
+  `src/test-setup.ts`, called per-test (never global).
 
 ## Definition of Done
 

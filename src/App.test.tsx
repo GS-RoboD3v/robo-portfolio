@@ -1,17 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import App from "./App";
-
-function stubMatchMedia(matches: boolean) {
-  window.matchMedia = vi.fn().mockImplementation(
-    () =>
-      ({
-        matches,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      }) as unknown as MediaQueryList,
-  );
-}
+import { stubMatchMedia } from "./test-setup";
 
 describe("App audit fixes", () => {
   afterEach(() => {
@@ -31,8 +21,8 @@ describe("App audit fixes", () => {
       "https://robod3v.com/services/automations",
     );
     expect(
-      faq.getByRole("link", { name: "/ai-agents" }),
-    ).toHaveAttribute("href", "https://robod3v.com/ai-agents");
+      faq.getByRole("link", { name: "robod3v.com/services/ai-agents" }),
+    ).toHaveAttribute("href", "https://robod3v.com/services/ai-agents");
     expect(
       faq.getByRole("link", { name: "info@robod3v.com" }),
     ).toHaveAttribute("href", "mailto:info@robod3v.com");
