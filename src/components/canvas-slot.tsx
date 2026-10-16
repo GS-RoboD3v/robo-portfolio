@@ -78,7 +78,7 @@ export function CanvasSlot() {
         <div
           role="img"
           aria-label="Διακοσμητικό φόντο"
-          className="h-[240px] w-full rounded-2xl border border-border bg-card"
+          className="h-32 w-full rounded-2xl border border-border bg-card md:h-[240px]"
         />
       )}
     </div>

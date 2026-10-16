@@ -26,7 +26,7 @@ npm run preview             # serve dist locally
 ```bash
 npx tsc --noEmit
 npm run lint                # eslint src scripts --max-warnings 0 (never bare `npx eslint`, binary quirk)
-npx vitest run              # colocated *.test.ts(x), expect 4 files / 6 tests
+npx vitest run              # colocated *.test.ts(x), expect 5 files / 10 tests
 npm run build && command grep -c 'application/ld+json' dist/index.html  # prerender check, expect ≥1
 gzip -c dist/assets/index-*.js | wc -c   # budget: initial JS ≤200KB gzip
 ```
@@ -71,6 +71,10 @@ Single-test filter: `npx vitest run <path>`.
   `ScrollReveal` (lazy) is the only animation primitive — no new ones.
 - `?case=<id>` deep-link (whitelist terragousto|lab) is the only routing;
   S5 cards stay outbound-links-only, no dialogs.
+- Base UI sets `data-orientation`, never `data-horizontal` — Tailwind
+  `data-*`/group variants must match runtime attributes actually emitted.
+- Tests have no auto-cleanup: call `cleanup()` in `afterEach` whenever a
+  file renders more than once, and stub `matchMedia` per-test (never global).
 
 ## Definition of Done
 

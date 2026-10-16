@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ChevronDown } from "lucide-react";
 import { site } from "./content/site";
 import { projects, type Project } from "./content/projects";
 import { itemListJsonLd, personJsonLd } from "./lib/jsonld";
@@ -11,10 +12,28 @@ import { ScrollReveal } from "./components/scroll-reveal";
 import { TechMarquee } from "./components/tech-marquee";
 import { Button } from "./components/ui/button";
 
-const faqs = [
+const faqs: { q: string; a: React.ReactNode }[] = [
   {
     q: "Τι υπηρεσίες προσφέρετε;",
-    a: "Web εφαρμογές και e-shops. Για αυτοματισμούς και AI coworkers δείτε το robod3v.com/services/automations και /ai-agents.",
+    a: (
+      <>
+        Web εφαρμογές και e-shops. Για αυτοματισμούς και AI coworkers δείτε το{" "}
+        <a
+          className="text-primary underline"
+          href="https://robod3v.com/services/automations"
+        >
+          robod3v.com/services/automations
+        </a>{" "}
+        και{" "}
+        <a
+          className="text-primary underline"
+          href="https://robod3v.com/ai-agents"
+        >
+          /ai-agents
+        </a>
+        .
+      </>
+    ),
   },
   {
     q: "Πόσο κοστίζει ένα έργο;",
@@ -34,9 +53,20 @@ const faqs = [
   },
   {
     q: "Πώς ξεκινάμε;",
-    a: "Ένα email στο info@robod3v.com με 3 γραμμές για το τι θέλετε να χτίσουμε.",
+    a: (
+      <>
+        Ένα email στο{" "}
+        <a
+          className="text-primary underline"
+          href={`mailto:${site.email}`}
+        >
+          {site.email}
+        </a>{" "}
+        με 3 γραμμές για το τι θέλετε να χτίσουμε.
+      </>
+    ),
   },
-] as const;
+];
 
 const CASE_SITE = "https://portfolio.robod3v.com/";
 const CASE_IDS = new Set(["terragousto", "lab"]);
@@ -150,7 +180,6 @@ export default function App() {
                     className="rounded-2xl border border-border bg-card p-4 md:p-6"
                   >
                     <h3 className="text-lg font-semibold">{p.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{p.oneLiner}</p>
                     <p className="mt-2 text-sm text-muted-foreground">{p.metrics}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Stack: {p.stack.join(" · ")}
@@ -166,7 +195,7 @@ export default function App() {
                         href={p.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-[44px] items-center text-sm font-medium text-primary"
+                        className="inline-flex min-h-[44px] items-center px-3 text-sm font-medium text-primary"
                       >
                         Live ↗
                       </a>
@@ -242,9 +271,14 @@ export default function App() {
               {faqs.map((f) => (
                 <details
                   key={f.q}
-                  className="rounded-xl border border-border bg-card px-4 py-3"
+                  className="group rounded-xl border border-border bg-card px-4 py-3"
                 >
-                  <summary className="min-h-[44px] cursor-pointer font-medium">
+                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center gap-2 font-medium marker:hidden [&::-webkit-details-marker]:hidden">
+                    <ChevronDown
+                      size={16}
+                      aria-hidden="true"
+                      className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+                    />
                     {f.q}
                   </summary>
                   <p className="mt-2 text-sm text-muted-foreground">{f.a}</p>
@@ -281,7 +315,7 @@ export default function App() {
         </ScrollReveal>
       </main>
 
-      <footer className="border-t border-border py-8" aria-label="Υποσέλιδο">
+      <footer className="border-t border-border py-8 pb-20 md:pb-8" aria-label="Υποσέλιδο">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 text-sm text-muted-foreground">
           <span>© RoboD3v — {new Date().getFullYear()} · Χωρίς cookies</span>
           <span className="flex flex-wrap gap-4">
@@ -293,13 +327,15 @@ export default function App() {
         </div>
       </footer>
 
-      <a
-        href={`mailto:${site.email}`}
-        aria-label={`Επικοινωνία — ${site.email}`}
-        className="fixed bottom-4 right-4 z-40 inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground shadow-lg md:hidden"
-      >
-        Επικοινωνία
-      </a>
+      {!active && (
+        <a
+          href={`mailto:${site.email}`}
+          aria-label={`Επικοινωνία — ${site.email}`}
+          className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground shadow-lg md:hidden"
+        >
+          Επικοινωνία
+        </a>
+      )}
 
       <ProjectDialog project={active} onClose={closeCase} />
     </>

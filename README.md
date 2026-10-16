@@ -21,8 +21,8 @@
   architecture mini, timeline — desktop dialog, bottom-sheet on mobile.
 - **Zero tracking** — no cookies, no analytics; privacy-by-design copy and
   headers (strict CSP, HSTS preload).
-- **Fast by construction** — prerendered single route, ~49KB initial JS,
-  Lighthouse mobile 95 / desktop 99.
+- **Fast by construction** — prerendered single route, ~45KB initial JS,
+  Lighthouse gates perf≥90 / a11y≥95.
 
 ## Quick Start
 
@@ -40,7 +40,7 @@ See [AGENTS.md](AGENTS.md) for verification commands and guardrails.
 |---|---|---|
 | Terragousto | E-shop, olive oils & hot sauces (Medusa v2) | https://terragousto.gr |
 | Lab | Free Greek IQ test, adaptive IRT scoring | https://greek-iq-app.vercel.app |
-| PlasiorE | 3D artist portfolio, 17 works | https://plasiore.netlify.app |
+| Plaisiore | 3D artist portfolio, 17 works | https://plasiore.netlify.app |
 | RoboSchool | Learning platform, 7 tracks / 65 lessons | https://school.robod3v.com |
 | Political Compass | Greek 40-question political quiz | https://robo-political-compass.vercel.app |
 

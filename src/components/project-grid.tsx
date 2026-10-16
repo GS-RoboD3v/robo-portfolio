@@ -103,17 +103,17 @@ export function ProjectGrid({
                 ))}
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex-wrap">
               <span className="text-xs text-muted-foreground">{p.status} ·</span>
               {previewDates[p.id] ? (
-                <span className="text-xs text-muted-foreground">
+                <span className="whitespace-nowrap text-xs text-muted-foreground">
                   ανανεώθηκε {previewDates[p.id]}
                 </span>
               ) : null}
               {p.dialog ? (
                 <button
                   onClick={() => onOpen(p)}
-                  className="inline-flex min-h-[44px] items-center gap-1 text-sm font-medium text-primary"
+                  className="ms-auto inline-flex min-h-[44px] items-center gap-1 whitespace-nowrap text-sm font-medium text-primary"
                 >
                   άνοιγμα <ExternalLink size={14} aria-hidden="true" />
                 </button>
@@ -122,7 +122,7 @@ export function ProjectGrid({
                   href={p.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-1 text-sm font-medium text-primary"
+                  className="ms-auto inline-flex min-h-[44px] items-center gap-1 whitespace-nowrap text-sm font-medium text-primary"
                 >
                   άνοιγμα live <ExternalLink size={14} aria-hidden="true" />
                 </a>

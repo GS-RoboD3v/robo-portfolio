@@ -110,6 +110,7 @@ body {
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   .tech-marquee {
     overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
   }
   .tech-marquee-track {
     flex-wrap: nowrap;
