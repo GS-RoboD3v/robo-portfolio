@@ -1,0 +1,32 @@
+# RoboD3v Portfolio (full context)
+> Web εφαρμογές, εκπαιδευτικές πλατφόρμες και εργαλεία ανάλυσης, σχεδιασμένα και υλοποιημένα από τη RoboD3v στην Ελλάδα. Ζωντανά, μετρήσιμα, χωρίς cookies.
+
+## Projects
+### terragousto [Money]
+Πλήρες e-shop με κάρτα + αντικαταβολή σε Medusa v2.
+Live: https://terragousto.gr
+Stack: React 18, Medusa v2, Tailwind v4
+
+### lab [Brains]
+Δωρεάν ελληνικό τεστ IQ με προσαρμοστική IRT βαθμολόγηση.
+Live: https://greek-iq-app.vercel.app
+Stack: Next.js 16, React 19, Upstash Redis
+
+### plaisiore [Beauty]
+Portfolio 3D artist με 17 έργα και κινηματογραφικά Vimeo embeds.
+Live: https://plasiore.netlify.app
+Stack: React 19, Tailwind v4, framer-motion
+
+### roboschool [Platform]
+Πλατφόρμα 7 tracks / 65 μαθημάτων με Stripe συνδρομές.
+Live: https://school.robod3v.com
+Stack: Next.js 16, Supabase, Stripe
+
+### political-compass [Viral]
+Ελληνικό πολιτικό τεστ 40 ερωτήσεων με κοινοποιήσιμο αποτέλεσμα.
+Live: https://robo-political-compass.vercel.app
+Stack: Next.js 16, React 19, html-to-image
+
+## Contact
+Email: info@robod3v.com
+Automations/AI agents: https://robod3v.com/services/automations, https://robod3v.com/services/ai-agents

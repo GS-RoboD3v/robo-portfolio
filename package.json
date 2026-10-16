@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && npm run llms-full && vite build && npm run prerender",
+    "llms-full": "tsx scripts/generate-llms-full.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint src scripts --max-warnings 0",

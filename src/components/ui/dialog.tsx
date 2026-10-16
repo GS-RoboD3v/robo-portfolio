@@ -40,7 +40,7 @@ export function DialogContent({
         {children}
         <BaseDialog.Close
           aria-label="Κλείσιμο"
-          className="absolute right-4 top-4 rounded p-2 text-muted-foreground hover:text-foreground"
+          className="absolute right-4 top-4 flex min-h-11 min-w-11 items-center justify-center rounded text-muted-foreground hover:text-foreground"
         >
           ✕
         </BaseDialog.Close>

@@ -38,13 +38,34 @@ const faqs = [
   },
 ] as const;
 
+const CASE_SITE = "https://portfolio.robod3v.com/";
+const CASE_IDS = new Set(["terragousto", "lab"]);
+
+function setCaseHead(id: string | null): void {
+  const href =
+    id !== null && CASE_IDS.has(id) ? `${CASE_SITE}?case=${id}` : CASE_SITE;
+  document
+    .querySelector('link[rel="canonical"]')
+    ?.setAttribute("href", href);
+  document
+    .querySelector('meta[property="og:url"]')
+    ?.setAttribute("content", href);
+}
+
 export default function App() {
   const [active, setActive] = React.useState<Project | null>(null);
 
   React.useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("case");
-    const found = projects.find((p) => p.id === id && p.dialog);
-    if (found) setActive(found);
+    const found = projects.find(
+      (p) => p.id === id && p.dialog && CASE_IDS.has(p.id),
+    );
+    if (found) {
+      setActive(found);
+      setCaseHead(found.id);
+    } else {
+      setCaseHead(null);
+    }
   }, []);
 
   function openCase(p: Project) {
@@ -52,6 +73,7 @@ export default function App() {
     const url = new URL(window.location.href);
     url.searchParams.set("case", p.id);
     window.history.pushState({}, "", url);
+    setCaseHead(p.id);
   }
 
   function closeCase() {
@@ -59,6 +81,7 @@ export default function App() {
     const url = new URL(window.location.href);
     url.searchParams.delete("case");
     window.history.pushState({}, "", url);
+    setCaseHead(null);
   }
 
   return (

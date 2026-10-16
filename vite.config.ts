@@ -5,6 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
+    // ponytail: no modulepreload hints — motion chunk is lazy with static
+    // fallbacks, eager preloading only burns ~47KB on first paint.
+    modulePreload: false,
     rollupOptions: {
       output: {
         manualChunks(id) {

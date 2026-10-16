@@ -1,0 +1,34 @@
+{
+  "generated": "2026-10-16T11:42:30.238Z",
+  "viewport": "1280x800",
+  "terragousto": {
+    "updated": "2026-10-16",
+    "status": "LIVE-CAPTURED",
+    "source": "https://terragousto.gr",
+    "bytes": 127986
+  },
+  "lab": {
+    "updated": "2026-10-16",
+    "status": "LIVE-CAPTURED",
+    "source": "https://greek-iq-app.vercel.app",
+    "bytes": 38876
+  },
+  "plaisiore": {
+    "updated": "2026-10-16",
+    "status": "LIVE-CAPTURED",
+    "source": "https://plasiore.netlify.app",
+    "bytes": 33528
+  },
+  "roboschool": {
+    "updated": "2026-10-16",
+    "status": "LIVE-CAPTURED",
+    "source": "https://school.robod3v.com",
+    "bytes": 47318
+  },
+  "political-compass": {
+    "updated": "2026-10-16",
+    "status": "LIVE-CAPTURED",
+    "source": "https://robo-political-compass.vercel.app",
+    "bytes": 38408
+  }
+}

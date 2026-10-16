@@ -26,12 +26,38 @@ const glowClass: Record<string, string> = {
   Beauty: "tile-glow-beauty",
 };
 
+function usePreviewDates(): Record<string, string> {
+  const [dates, setDates] = React.useState<Record<string, string>>({});
+  React.useEffect(() => {
+    let cancelled = false;
+    fetch("/previews/previews.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j: unknown) => {
+        if (cancelled || j === null || typeof j !== "object") return;
+        const d: Record<string, string> = {};
+        for (const [k, v] of Object.entries(j as Record<string, unknown>)) {
+          if (v !== null && typeof v === "object" && "updated" in v) {
+            const u = (v as { updated: unknown }).updated;
+            if (typeof u === "string") d[k] = u;
+          }
+        }
+        setDates(d);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return dates;
+}
+
 export function ProjectGrid({
   onOpen,
 }: {
   onOpen: (p: Project) => void;
 }) {
   const [filter, setFilter] = React.useState<AxisFilter>("All");
+  const previewDates = usePreviewDates();
   const visible = filterProjects(projects, filter);
 
   return (
@@ -79,6 +105,11 @@ export function ProjectGrid({
             </CardContent>
             <CardFooter>
               <span className="text-xs text-muted-foreground">{p.status} ·</span>
+              {previewDates[p.id] ? (
+                <span className="text-xs text-muted-foreground">
+                  ανανεώθηκε {previewDates[p.id]}
+                </span>
+              ) : null}
               {p.dialog ? (
                 <button
                   onClick={() => onOpen(p)}
