@@ -46,13 +46,15 @@ const Canvas = React.lazy(() =>
 export function CanvasSlot() {
   const [show, setShow] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
-  const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const staticMode =
+    typeof window === "undefined" ||
+    !window.matchMedia ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    window.matchMedia("(max-width: 767px)").matches;
 
   React.useEffect(() => {
     const el = ref.current;
-    if (!el || reduced) return;
+    if (!el || staticMode) return;
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -64,11 +66,11 @@ export function CanvasSlot() {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [reduced]);
+  }, [staticMode]);
 
   return (
     <div ref={ref}>
-      {show && !reduced ? (
+      {show && !staticMode ? (
         <React.Suspense fallback={null}>
           <Canvas />
         </React.Suspense>

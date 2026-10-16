@@ -2,9 +2,13 @@
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "base-nova",
   "tailwind": {
+    "config": "",
+    "css": "src/index.css",
     "baseColor": "neutral",
     "cssVariables": true
   },
+  "rsc": false,
+  "tsx": true,
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",

@@ -8,10 +8,17 @@ import {
 } from "../content/projects";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { LiveDot } from "./live-dot";
 
 export type AxisFilter = Axis | "All";
 
-const filters: AxisFilter[] = ["All", "Money", "Brains", "Beauty"];
+const filters: { value: AxisFilter; label: string }[] = [
+  { value: "All", label: "Όλα" },
+  { value: "Money", label: "Money" },
+  { value: "Brains", label: "Brains" },
+  { value: "Beauty", label: "Beauty" },
+];
 
 const glowClass: Record<string, string> = {
   Money: "tile-glow-money",
@@ -28,22 +35,17 @@ export function ProjectGrid({
   const visible = filterProjects(projects, filter);
 
   return (
-    <div>
-      <div role="tablist" aria-label="Φίλτρο άξονα" className="mb-4 flex flex-wrap gap-2">
+    <Tabs
+      value={filter}
+      onValueChange={(v) => setFilter(v as AxisFilter)}
+    >
+      <TabsList aria-label="Φίλτρο άξονα" className="mb-4">
         {filters.map((f) => (
-          <button
-            key={f}
-            role="tab"
-            aria-selected={filter === f}
-            onClick={() => setFilter(f)}
-            className={`min-h-[44px] rounded-full border border-border px-4 text-sm ${
-              filter === f ? "bg-primary text-primary-foreground" : "bg-card"
-            }`}
-          >
-            {f === "All" ? "Όλα" : f}
-          </button>
+          <TabsTrigger key={f.value} value={f.value}>
+            {f.label}
+          </TabsTrigger>
         ))}
-      </div>
+      </TabsList>
       <div className="grid gap-4 md:grid-cols-3 md:gap-6">
         {visible.map((p) => (
           <Card key={p.id} className={glowClass[p.axis] ?? ""}>
@@ -51,10 +53,7 @@ export function ProjectGrid({
               <div className="mb-2 flex items-center gap-2">
                 <Badge variant="secondary">{p.axis}</Badge>
                 <Badge variant="live">
-                  <span
-                    aria-hidden="true"
-                    className="mr-1.5 inline-block h-2 w-2 rounded-full bg-live"
-                  />
+                  <LiveDot />
                   LIVE
                 </Badge>
               </div>
@@ -101,6 +100,6 @@ export function ProjectGrid({
           </Card>
         ))}
       </div>
-    </div>
+    </Tabs>
   );
 }

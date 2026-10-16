@@ -68,6 +68,65 @@ body {
   box-shadow: 0 0 40px -12px var(--tile-glow-beauty);
 }
 
+/* P1 motion guards (§11): glow is static box-shadow only, never animated;
+   hidden on touch. Live-dot ping runs once, desktop + hover + motion-OK only.
+   Marquee scrolls on desktop, pauses on hover, static wrap otherwise. */
+.live-ping {
+  display: none;
+}
+
+@media (min-width: 768px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .live-ping {
+    display: inline-flex;
+    animation: live-ping 1.6s cubic-bezier(0, 0, 0.2, 1) 1;
+  }
+}
+
+@keyframes live-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@media (hover: none) {
+  .tile-glow-money,
+  .tile-glow-brains,
+  .tile-glow-beauty {
+    box-shadow: none;
+  }
+}
+
+.tech-marquee-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .tech-marquee {
+    overflow: hidden;
+  }
+  .tech-marquee-track {
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: tech-scroll 32s linear infinite;
+  }
+  .tech-marquee:hover .tech-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes tech-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
